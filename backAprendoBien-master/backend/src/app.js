@@ -54,6 +54,10 @@ app.use('/api/block', require('./routers/block/router.block'))
 
 app.use('/api/exercise', require('./routers/exercise/exercise'))
 
+//DIAGNOSIS
+
+app.use('/api/diagnosis', require('./routers/diagnosis/router.diagnosis'))
+
 //static file
 app.use(express.static(path.join(__dirname, 'public')))
 
