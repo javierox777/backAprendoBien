@@ -26,7 +26,8 @@ const schemaStudents = new Schema({
     phoneA:String,
     relation:String,
     suggestion:String,
-    diagnosis:Boolean
+    diagnosis:Boolean,
+    exercise: { type: Schema.Types.ObjectId, ref: 'exercises' }
  
 })
 

@@ -58,8 +58,14 @@ app.use('/api/exercise', require('./routers/exercise/exercise'))
 
 app.use('/api/diagnosis', require('./routers/diagnosis/router.diagnosis'))
 
+//session
+app.use("/api/session", require("./routers/session/router.session"))
+
+
 //static file
 app.use(express.static(path.join(__dirname, 'public')))
+
+
 
 
 

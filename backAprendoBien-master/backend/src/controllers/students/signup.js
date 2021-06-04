@@ -101,10 +101,10 @@ ctrls.loginStudents = async(req, res)=>{
     if(!usuario){
         return(res.json({message: "error", body:"auth/user-not-found"}))
     }
-    console.log("usuario Sus : ", usuario.suscription)
-    console.log("hoy : ", hoy)
+    
    
-    if(usuario.suscription < hoy){       
+    if(usuario.suscription < hoy){    
+       
         return(res.json({
             message:"error",
             body:"auth/user-whithout-suscription",
@@ -117,9 +117,10 @@ ctrls.loginStudents = async(req, res)=>{
     console.log("por aca el hash", hash)
     if(hash){
         const token = jwt.sign({_id: usuario._id}, "aprender",{expiresIn:"1 days"})
+        const data = await  STUDENTS.findById({_id:usuario._id}).populate("exercise")
         res.json({
             accessToken:token,
-            user:usuario
+            user:data
         })
     }else{
         res.json({
