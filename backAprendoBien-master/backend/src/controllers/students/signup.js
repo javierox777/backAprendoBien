@@ -1,4 +1,6 @@
 const STUDENTS = require("../../models/students/students")
+const BLOCK = require("../../models/block/block")
+const EXERCISE = require("../../models/exercise/exercise")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const moment =require("moment")
@@ -45,8 +47,19 @@ ctrls.signupStudent = async(req, res)=>{
         emailA,
         phoneA,
         relation,
-        suggestion
+        suggestion,
+        block,
+        challenge,
+        exercise
+ 
     } = req.body
+
+ 
+        // const primerbloque = await BLOCK.findOne({stage:stage}).where({"number":1})
+
+        // const primerEjercicio = await EXERCISE.findOne({block:primerbloque._id}).where({"number":1})
+ 
+
         const newStudent = new STUDENTS({
             name:name,
             lastname:lastname, 
@@ -67,7 +80,11 @@ ctrls.signupStudent = async(req, res)=>{
             relation:relation,
             suggestion:suggestion,
             suscription:hoy,
-            diagnosis:false
+            diagnosis:false,
+            exercise:exercise,
+            challenge:challenge,
+            block:block,
+         
             
     })
 
@@ -116,8 +133,12 @@ ctrls.loginStudents = async(req, res)=>{
     const hash = await bcrypt.compare(password, usuario.password)
     console.log("por aca el hash", hash)
     if(hash){
+        console.log("por aca el error 1", usuario)
         const token = jwt.sign({_id: usuario._id}, "aprender",{expiresIn:"1 days"})
-        const data = await  STUDENTS.findById({_id:usuario._id}).populate("exercise")
+        console.log("por aca el error 2", usuario)
+        
+        console.log("por aca el error 3", usuario._id)
+        const data = await  STUDENTS.findById({_id:usuario._id})
         res.json({
             accessToken:token,
             user:data

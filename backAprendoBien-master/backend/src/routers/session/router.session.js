@@ -1,12 +1,13 @@
 const {Router}= require("express")
 const router = Router()
-const {createSession} = require("../../controllers/session/controllers.session")
+const {createSession, getExerciseForIdStudents} = require("../../controllers/session/controllers.session")
 
 
 
 
 
-router.post("/createsession", createSession )
+router.post("/createsession/:id", createSession )
+router.get("/getprogress/:id", getExerciseForIdStudents )
 
 
 

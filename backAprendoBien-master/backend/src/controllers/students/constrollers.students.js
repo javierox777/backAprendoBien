@@ -1,4 +1,6 @@
 const STUDENTS = require("../../models/students/students")
+const BLOCK = require("../../models/block/block")
+const EXERCISE = require("../../models/exercise/exercise")
 const bcrypt = require("bcryptjs")
 const ctrls = {}
 
@@ -42,8 +44,16 @@ ctrls.updateStudents = async(req, res)=>{
             emailA,
             phoneA,
             relation,
-            suggestion
+            suggestion,
+          
             } =req.body
+         
+            const primerbloque = await BLOCK.findOne({stage:stage}).where({"number":1})
+            
+            const primerEjercicio = await EXERCISE.findOne({block:primerbloque._id}).where({"number":1})
+          
+    
+    
         const data =  await STUDENTS.findOneAndUpdate({_id:req.params.id},
            
           { 
@@ -63,7 +73,8 @@ ctrls.updateStudents = async(req, res)=>{
                 emailA,
                 phoneA,
                 relation,
-                suggestion
+                suggestion,
+                exercise:primerEjercicio._id
             },{ new: true }
          
         
@@ -99,6 +110,12 @@ ctrls.updateStudents = async(req, res)=>{
             relation,
             suggestion
             } =req.body
+           
+            const primerbloque = await BLOCK.findOne({stage:stage}).where({"number":1})
+          
+            const primerEjercicio = await EXERCISE.findOne({block:primerbloque._id}).where({"number":1})
+           
+            
             const encrypt =await bcrypt.hash(password, 10)
         const data =  await STUDENTS.findOneAndUpdate({_id:req.params.id},
              
@@ -120,7 +137,8 @@ ctrls.updateStudents = async(req, res)=>{
              emailA,
              phoneA,
              relation,
-             suggestion
+             suggestion,
+             exercise:primerEjercicio._id
          },{ new: true }
              
             

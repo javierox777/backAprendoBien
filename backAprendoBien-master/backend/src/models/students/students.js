@@ -27,7 +27,11 @@ const schemaStudents = new Schema({
     relation:String,
     suggestion:String,
     diagnosis:Boolean,
-    exercise: { type: Schema.Types.ObjectId, ref: 'exercises' }
+    challenge:Number,
+    exercise:Number,
+    block:Number,
+    stage:Number
+
  
 })
 

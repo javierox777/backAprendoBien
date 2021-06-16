@@ -1,12 +1,20 @@
+const { find } = require("../../models/exercise/exercise");
 const EXERCISE = require("../../models/exercise/exercise");
+const BLOCK = require("../../models/block/block")
 const {deleteImg} = require("../../public/students/deleteimg")
 const ctrls = {};
 
+
+
+ctrls.exerciseForBlock =  async (req, res)=>{
+  const data = await EXERCISE.find({"block":req.params.id}).sort({"number":1})
+  res.json({data})
+}
 ctrls.allExercise = async (req, res) => {
   try {
     const data = await EXERCISE.find().populate({path:"block", populate:{path:"stage"}}).sort({sage:1})
     res.json({
-      data,
+      data
     });
   } catch (error) {
     res.json({
@@ -16,6 +24,40 @@ ctrls.allExercise = async (req, res) => {
   }
 };
 
+
+ctrls.allExercisesBlok = async(req, res)=>{
+  const cantidad = req.params.n 
+  try {
+    const data = await EXERCISE.findOne({_id:req.params.id})
+    const data1 = await EXERCISE.find({"block":data.block}).sort({"number":1})
+    const numeroEjercicioBlock =parseInt(data1.length)
+    const cantidadArestar =parseInt(data.number)
+    const ejercicioDisponible = numeroEjercicioBlock - cantidadArestar 
+   // console.log("ejerciciodisponible", ejercicioDisponible)
+    if (ejercicioDisponible < cantidad){
+      const data2 =await data1.slice(data.number)
+      console.log("entro data1.numberoooo", data.number)
+      res.json(data2)
+
+    }else{
+      let resultado =[]
+    const data3 = data1.slice(data.number)
+    console.log("data3", data1)
+      for(let i=0; i < cantidad;i++){
+         resultado.push(data3[i])
+       // console.log("por aca el push", data3[i])
+      }
+  
+    console.log("por aca entro")
+    res.json({resultado})
+    }
+  } catch (error) {
+    res.json({
+      message: "error",
+      body: error,
+    });
+  }
+}
 // ctrls.createExercise = async(req, res)=>{
 //   const block = await EXERCISE.findOne({
 //     number: req.body.number,
