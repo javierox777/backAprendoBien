@@ -1,10 +1,40 @@
 const { find } = require("../../models/exercise/exercise");
 const EXERCISE = require("../../models/exercise/exercise");
 const BLOCK = require("../../models/block/block")
+const STAGE = require("../../models/stage/stage")
 const {deleteImg} = require("../../public/students/deleteimg")
 const ctrls = {};
 
 
+
+ctrls.getAllExercisesNumBlockNumStage= async(req, res)=>{
+  const idStage = await STAGE.findOne({number:req.params.num})
+  const blockList = await BLOCK.find({stage:idStage._id})
+  const findBlockforNumber = await BLOCK.findOne({number:req.params.numb}).where({"stage":blockList[0].stage}) 
+  const ordenar = await EXERCISE.find({block:findBlockforNumber._id}).populate({path:"block", populate:{path:"stage"}}).sort({"number":1})
+  const data = ordenar.sort((a, b)=>{
+    if(a.number < b.number){
+      return -1
+    }
+    if(a.number > b.number){
+      return 1
+    }
+  })
+
+
+  res.json({data})
+
+
+}
+ctrls.getAllExerciseAllBlocFooIDStage= async(req, res)=>{
+  const idStage = await STAGE.findOne({number:req.params.num})
+  const blockList = await BLOCK.find({stage:idStage._id})
+  const findBlockforNumber = await BLOCK.findOne({number:req.params.numb}).where({"stage":blockList[0].stage}) 
+  const exerciseList = await EXERCISE.find({block:findBlockforNumber._id})
+  res.json({blockList, exerciseList})
+
+
+}
 
 ctrls.exerciseForBlock =  async (req, res)=>{
   const data = await EXERCISE.find({"block":req.params.id}).sort({"number":1})
@@ -33,22 +63,22 @@ ctrls.allExercisesBlok = async(req, res)=>{
     const numeroEjercicioBlock =parseInt(data1.length)
     const cantidadArestar =parseInt(data.number)
     const ejercicioDisponible = numeroEjercicioBlock - cantidadArestar 
-   // console.log("ejerciciodisponible", ejercicioDisponible)
+
     if (ejercicioDisponible < cantidad){
       const data2 =await data1.slice(data.number)
-      console.log("entro data1.numberoooo", data.number)
+
       res.json(data2)
 
     }else{
       let resultado =[]
     const data3 = data1.slice(data.number)
-    console.log("data3", data1)
+
       for(let i=0; i < cantidad;i++){
          resultado.push(data3[i])
-       // console.log("por aca el push", data3[i])
+
       }
   
-    console.log("por aca entro")
+
     res.json({resultado})
     }
   } catch (error) {
@@ -58,42 +88,14 @@ ctrls.allExercisesBlok = async(req, res)=>{
     });
   }
 }
-// ctrls.createExercise = async(req, res)=>{
-//   const block = await EXERCISE.findOne({
-//     number: req.body.number,
-//     block: req.body.block
-//   });
-// console.log("body aca : ", req.body)
-//   if (block) {
-//     return res.json({
-//       message: "error",
-//       body: "exercise/number-already-in-use",
-//     });
-//   } else {
-//     const {  solution, 
-//       block,
-//       number } = req.body;
-//     const data1 = new EXERCISE({
-//     solution, 
-//     block,
-//     number,
- 
-//     });
-//     await data1.save();
-//     const data = await EXERCISE.findOne({ _id: data1._id }).populate("block");
-//     res.json({
-//       message: "success",
-//       body: data
-//     });
-//   }
-// }
+
 
 ctrls.createExerciseWithImage = async(req, res)=>{
   const block = await EXERCISE.findOne({
     number: req.body.number,
     block: req.body.block
   });
-console.log("body aca : ", req.body)
+
   if (block) {
     return res.json({
       message: "error",
@@ -123,43 +125,6 @@ console.log("body aca : ", req.body)
 }
 
 
-// ctrls.updateExercise = async (req, res) => {
-//   try {  
-//     const { solution, 
-//       orientation, 
-//       operator,
-//       num1, 
-//       num2, 
-//       num3, 
-//       num4, 
-//       num5, 
-//       num6 }=req.body
-//     const data = await EXERCISE.findOneAndUpdate({ _id: req.params.id },
-//       {
-//         solution, 
-//         orientation, 
-//         operator,
-//         num1, 
-//         num2, 
-//         num3, 
-//         num4, 
-//         num5, 
-//         num6 
-//       },
-//       { new: true }
-//     ).populate('block')
-
-//     res.json({
-//       message: "success",
-//       body: data
-//     });
-//   } catch (error) {
-//     res.json({
-//       message: "error",
-//       body: error,
-//     });
-//   }
-// };
 
 
 ctrls.updateExerciseWithImage = async (req, res) => {
@@ -178,7 +143,6 @@ ctrls.updateExerciseWithImage = async (req, res) => {
       },
       { new: true }
     ).populate('block')
-    console.log("data por estos tramos", data)
     res.json({
       message: "success",
       body: data

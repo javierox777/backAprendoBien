@@ -1,15 +1,15 @@
 const {Router} = require("express")
 const router = Router()
 const Auth = require("../../helper/auth")
-const {signupStudent, loginStudents} = require("../../controllers/students/signup")
-const {allStudents, idStudents, updateStudents, deleteStudents} = require("../../controllers/students/constrollers.students")
+const {signupStudent, loginStudents, promedioResult} = require("../../controllers/students/signup")
+const {allStudents, idStudents, updateStudents, deleteStudents, updatePassword} = require("../../controllers/students/constrollers.students")
 const {verify} = require("../../controllers/students/studentInit")
 
 
 
-
+router.get('/promresult/:id',promedioResult )
 router.post('/signup',signupStudent )
-
+router.put('/updatepassword/:id', updatePassword)
 router.post('/signin', loginStudents)
 router.get('/allstudents', allStudents)
 router.get('/idstudents/:id', idStudents)

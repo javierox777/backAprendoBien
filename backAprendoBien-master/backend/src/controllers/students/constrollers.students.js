@@ -24,9 +24,7 @@ ctrls.idStudents = async(req, res)=>{
 //update estudiante
 
 ctrls.updateStudents = async(req, res)=>{
-      
-    if(!req.body.password == ""){ 
-        
+    
            const {   
             name,
             lastName, 
@@ -38,6 +36,9 @@ ctrls.updateStudents = async(req, res)=>{
             address, 
             course, 
             stage,
+            block,
+            exercise,
+            challenge,
             nameA,
             lastNameA,
             rutA,
@@ -45,15 +46,8 @@ ctrls.updateStudents = async(req, res)=>{
             phoneA,
             relation,
             suggestion,
-          
             } =req.body
-         
-            const primerbloque = await BLOCK.findOne({stage:stage}).where({"number":1})
-            
-            const primerEjercicio = await EXERCISE.findOne({block:primerbloque._id}).where({"number":1})
-          
-    
-    
+
         const data =  await STUDENTS.findOneAndUpdate({_id:req.params.id},
            
           { 
@@ -66,7 +60,9 @@ ctrls.updateStudents = async(req, res)=>{
                 suscription, 
                 address, 
                 course, 
-                stage, 
+                stage,
+                block,
+                challenge,
                 nameA,
                 lastNameA,
                 rutA,
@@ -74,12 +70,9 @@ ctrls.updateStudents = async(req, res)=>{
                 phoneA,
                 relation,
                 suggestion,
-                exercise:primerEjercicio._id
+                exercise
             },{ new: true }
-         
-        
-            
-           
+  
         )
       
         return  res.json({
@@ -88,73 +81,19 @@ ctrls.updateStudents = async(req, res)=>{
               body:data
           })
       
-    }else{
-        console.log("vacio")
-        const {   
-            name,
-            lastName, 
-            rut,
-            birthDate,
-            email,
-            phone, 
-            suscription, 
-            address, 
-            course, 
-            stage,
-            nameA,
-            lastNameA,
-            password,
-            rutA,
-            emailA,
-            phoneA,
-            relation,
-            suggestion
-            } =req.body
-           
-            const primerbloque = await BLOCK.findOne({stage:stage}).where({"number":1})
-          
-            const primerEjercicio = await EXERCISE.findOne({block:primerbloque._id}).where({"number":1})
-           
-            
-            const encrypt =await bcrypt.hash(password, 10)
-        const data =  await STUDENTS.findOneAndUpdate({_id:req.params.id},
-             
-            { 
-             name,
-             lastName, 
-             rut,
-             birthDate,
-             email,
-             password: encrypt,
-             phone, 
-             suscription, 
-             address, 
-             course, 
-             stage, 
-             nameA,
-             lastNameA,
-             rutA,
-             emailA,
-             phoneA,
-             relation,
-             suggestion,
-             exercise:primerEjercicio._id
-         },{ new: true }
-             
-            
-         )
-        await data.save()
-        return  res.json({
-            
-            message: "success",
-            body:data
-        })
     
-    }
   
   }
 
-
+  ctrls.updatePassword = async(req, res)=>{
+      const {password} = req.body
+      console.log("update password", req.body)
+      const encrypt =await bcrypt.hash(password, 10)
+      const data= await STUDENTS.findByIdAndUpdate({_id:req.params.id},{
+              password:encrypt
+      },{new:true})
+      res.json({data})
+  }
   ctrls.deleteStudents = async (req, res)=>{
       await STUDENTS.findByIdAndDelete({_id:req.params.id})
       res.json({

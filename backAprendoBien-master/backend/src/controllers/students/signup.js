@@ -1,5 +1,5 @@
 const STUDENTS = require("../../models/students/students")
-const BLOCK = require("../../models/block/block")
+const SESSION = require("../../models/session/session")
 const EXERCISE = require("../../models/exercise/exercise")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
@@ -15,7 +15,7 @@ const ctrls = {}
 
 const hoy=moment().format('YYYY-MM-DD') 
 
-console.log(hoy)
+
 // ctrls.signupStudent = async(req, res)=>{
     
     
@@ -64,6 +64,7 @@ ctrls.signupStudent = async(req, res)=>{
             name:name,
             lastname:lastname, 
             rut:rut,
+            date:hoy,
             birthDate:birthDate,
             email:email,
             password:password,
@@ -100,7 +101,7 @@ ctrls.signupStudent = async(req, res)=>{
         }else{
         newStudent.password =await bcrypt.hash(password, 10)
         const token = jwt.sign({_id:newStudent._id}, "aprender")
-        console.log("success",newStudent)
+        
         await newStudent.save()
         res.json({
            message:"success",
@@ -112,7 +113,7 @@ ctrls.signupStudent = async(req, res)=>{
 
 
 ctrls.loginStudents = async(req, res)=>{
-    console.log("req por aca :", req.body)
+   
     const {email, password}=req.body
     const usuario = await STUDENTS.findOne({email:email})
     if(!usuario){
@@ -131,13 +132,13 @@ ctrls.loginStudents = async(req, res)=>{
     }
 
     const hash = await bcrypt.compare(password, usuario.password)
-    console.log("por aca el hash", hash)
+    
     if(hash){
-        console.log("por aca el error 1", usuario)
+       
         const token = jwt.sign({_id: usuario._id}, "aprender",{expiresIn:"1 days"})
-        console.log("por aca el error 2", usuario)
+       
         
-        console.log("por aca el error 3", usuario._id)
+       
         const data = await  STUDENTS.findById({_id:usuario._id})
         res.json({
             accessToken:token,
@@ -152,6 +153,23 @@ ctrls.loginStudents = async(req, res)=>{
     }
 }
 
+ctrls.promedioResult = async(req, res)=>{
+    const promedio = await SESSION.find({user:req.params.id})
+
+    //promedio de result y time 
+    let suma=[]
+    let sumT=[]
+     promedio.map(e=>{
+      
+    return( suma.push(e.result), sumT.push(e.timeprom)
+     ) 
+    })
+    
+  let  promR =( suma.reduce((totalSuma, valorResult)=>totalSuma + valorResult) / promedio.length)
+  let  promT =( sumT.reduce((totalSuma, valorResult)=>totalSuma + valorResult) / promedio.length)
+  let data={promedioResult:promR, promTime:promT}
+     res.json(data)
+}
 
 module.exports=ctrls
 

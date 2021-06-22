@@ -1,4 +1,4 @@
-const { findById } = require("../../models/stage/stage");
+
 const STAGE = require("../../models/stage/stage");
 const fs = require("fs")
 
@@ -59,18 +59,18 @@ ctrls.updateStageDescription = async (req, res) => {
 };
 
 ctrls.updateStageImage = async (req, res) => {
-    // const images = await STAGE.findById({_id:req.params.id})
+  const { description } = req.body;
     try {
         const data = await STAGE.findOneAndUpdate(
             { _id: req.params.id },
             {
               filename: req.file.filename,
               path: "/students/" + req.file.filename,
+              description:description
             },
             {new:true}
           );
-        //   console.log(data)
-        //   fs.unlink(images.path)
+     
           res.json({
             message: "success",
             body: data,

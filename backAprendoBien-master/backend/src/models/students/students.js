@@ -4,6 +4,7 @@ const fecha = new Date()
 const f = fecha.getFullYear()
 const schemaStudents = new Schema({
     name:String,
+    assistance:Number,
     lastname: String,
     date: String,
     rut:String,
@@ -13,12 +14,10 @@ const schemaStudents = new Schema({
     rol:String,
     filename:String,
     path:String,
-    rol:String,
     email:String,
     address:String,
     password:String,
     course:String,
-    stage:String,
     nameA:String,
     lastnameA:String,
     rutA:String,

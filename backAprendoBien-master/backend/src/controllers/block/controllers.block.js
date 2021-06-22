@@ -72,18 +72,44 @@ ctrls.getBlock = async (req, res) => {
   //     })
   // }
 };
-
-ctrls.updateBlockImage = async (req, res) => {
+ctrls.updateBlockDescription = async (req, res) => {
+  const {description}=req.body
   try {
+
+    const data = await BLOCK.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        description:description
+      },
+      { new: true }
+    ).populate('stage')
+
+    res.json({
+      message: "success",
+      body: data
+    });
+  } catch (error) {
+    res.json({
+      message: "error",
+      body: error,
+    });
+  }
+};
+ctrls.updateBlockImage = async (req, res) => {
+  const {description}=req.body
+
+  try {
+
     const data = await BLOCK.findOneAndUpdate(
       { _id: req.params.id },
       {
         filename: req.file.filename,
         path: "/students/" + req.file.filename,
+        description:description
       },
       { new: true }
     ).populate('stage')
-
+   
     res.json({
       message: "success",
       body: data
