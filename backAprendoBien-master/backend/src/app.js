@@ -61,6 +61,8 @@ app.use('/api/diagnosis', require('./routers/diagnosis/router.diagnosis'))
 //session
 app.use("/api/session", require("./routers/session/router.session"))
 
+//diagnosism
+app.use("/api/diagnosism", require("./routers/diagnosism/router.diagnosism"))
 
 //static file
 app.use(express.static(path.join(__dirname, 'public')))

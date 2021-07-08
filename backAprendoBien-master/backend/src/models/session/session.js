@@ -15,7 +15,12 @@ const sessionSchema = new Schema({
     startDate:String,
     endDate:String,
     numExercise:Number,
-    user:{type: Schema.Types.ObjectId, ref: 'Students'}
+    user:{type: Schema.Types.ObjectId, ref: 'Students'},
+    battlePass:Number,
+    correct:Number,
+    incorrect:Number,
+    start:String,
+    end:String
     
     
 

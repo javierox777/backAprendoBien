@@ -29,7 +29,12 @@ const schemaStudents = new Schema({
     challenge:Number,
     exercise:Number,
     block:Number,
-    stage:Number
+    stage:Number,
+    dateU:String,
+    path:String,
+    filename:String,
+    diagnosism:{type: Schema.Types.ObjectId, ref: 'diagnosisms'}
+
 
  
 })

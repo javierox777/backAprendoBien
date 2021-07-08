@@ -15,9 +15,8 @@ if(numero){
   const { description, number } = req.body;
   const data = new STAGE({
     number,
-    description,
-    filename: req.file.filename,
-    path: "/students/" + req.file.filename,
+    description
+   
   });
   await data.save();
   res.json({

@@ -6,6 +6,7 @@ const schemaBlock = new Schema({
     number : Number,
     filename:String,
     path:String,
+    link:String,
     stage: { type: Schema.Types.ObjectId, ref: 'stages' }
 })
 

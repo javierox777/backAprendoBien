@@ -15,7 +15,7 @@ const hoyS=moment().format('YYYY-MM-DD')
 //const hoyMenosUno = moment().subtract(1, 'days').format('YYYY-MM-DD');
 
 
-ctrls.cronn =()=>{ cron.schedule('31 13 * * * ',async ()=>{ // esta linea permite la auto ejecucion de la funcion de cron 
+ctrls.cronn =()=>{ cron.schedule('46 14 * * * ',async ()=>{ // esta linea permite la auto ejecucion de la funcion de cron 
         console.log("hola wei se imprimio a las 3:16", hoy)
         if(dia === 6 || dia === 0 ){
          
@@ -31,7 +31,7 @@ ctrls.cronn =()=>{ cron.schedule('31 13 * * * ',async ()=>{ // esta linea permit
                    const resultado = session.pop()
                    
                    if(resultado.date == hoyS){
-                       console.log("si hizo tarea")
+                       console.log("si hizo")
                    }else{
                     createMailNotTask(e._id)
                      console.log("mandando id de user", e._id)

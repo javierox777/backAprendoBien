@@ -50,7 +50,8 @@ ctrls.signupStudent = async(req, res)=>{
         suggestion,
         block,
         challenge,
-        exercise
+        exercise,
+        diagnosism
  
     } = req.body
 
@@ -84,7 +85,10 @@ ctrls.signupStudent = async(req, res)=>{
             diagnosis:false,
             exercise:exercise,
             challenge:challenge,
+            diagnosism: diagnosism,
             block:block,
+            path:null,
+            filename:null
          
             
     })
@@ -156,19 +160,24 @@ ctrls.loginStudents = async(req, res)=>{
 ctrls.promedioResult = async(req, res)=>{
     const promedio = await SESSION.find({user:req.params.id})
 
-    //promedio de result y time 
-    let suma=[]
-    let sumT=[]
-     promedio.map(e=>{
-      
-    return( suma.push(e.result), sumT.push(e.timeprom)
-     ) 
-    })
-    
-  let  promR =( suma.reduce((totalSuma, valorResult)=>totalSuma + valorResult) / promedio.length)
-  let  promT =( sumT.reduce((totalSuma, valorResult)=>totalSuma + valorResult) / promedio.length)
-  let data={promedioResult:promR, promTime:promT}
-     res.json(data)
+if(promedio){
+        //promedio de result y time 
+        let suma=[]
+        let sumT=[]
+         promedio.map(e=>{
+          
+        return( suma.push(e.result), sumT.push(e.timeprom)
+         ) 
+        })
+        
+      let  promR =( suma.reduce((totalSuma, valorResult)=>totalSuma + valorResult) / promedio.length)
+      let  promT =( sumT.reduce((totalSuma, valorResult)=>totalSuma + valorResult) / promedio.length)
+      let data={promedioResult:promR, promTime:promT}
+    return  res.json(data)
+}else{
+    res.json(promedio)
+}
+     
 }
 
 module.exports=ctrls

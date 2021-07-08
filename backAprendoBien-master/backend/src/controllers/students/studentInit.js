@@ -7,7 +7,7 @@ ctrls.verify =async (req, res)=>{
    
     try {
         const { authorization } = req.headers;
-       
+      
         if (!authorization) {
           return  res.json({ message: 'Authorization token missing' });
         }

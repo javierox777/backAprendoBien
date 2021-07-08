@@ -37,13 +37,14 @@ ctrls.createBlock = async (req, res) => {
       body: "block/number-already-in-use",
     });
   } else {
-    const { description, number, stage } = req.body;
+    const { description, number, stage, link } = req.body;
     const data1 = new BLOCK({
       description,
       number,
       filename: req.file.filename,
       path: "/students/" + req.file.filename,
       stage,
+      link
     });
     await data1.save();
     const data = await BLOCK.findOne({ _id: data1._id }).populate("stage");
@@ -73,13 +74,15 @@ ctrls.getBlock = async (req, res) => {
   // }
 };
 ctrls.updateBlockDescription = async (req, res) => {
-  const {description}=req.body
+  const {description, link}=req.body
   try {
 
     const data = await BLOCK.findOneAndUpdate(
       { _id: req.params.id },
       {
-        description:description
+        description:description,
+        link:link
+
       },
       { new: true }
     ).populate('stage')
